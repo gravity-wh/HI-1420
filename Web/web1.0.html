@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.42GHz 中性氢(HI)谱线望远镜项目 | 东南大学</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义样式 */
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #000000;
+            color: #e2e8f0; /* slate-200 */
+            scroll-behavior: smooth;
+        }
+        /* 导航栏样式 */
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #64ffda; /* 薄荷绿高亮 */
+        }
+        /* 标题样式 */
+        .section-title {
+            font-size: 2.5rem; /* 40px */
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 3rem; /* 48px */
+        }
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 3.75rem; /* 60px */
+            }
+        }
+        /* 滚动渐入动画 */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* 表格样式 */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .custom-table th, .custom-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #1f2937; /* gray-800 */
+        }
+        .custom-table th {
+            color: #64ffda;
+            font-weight: 600;
+        }
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* 模态窗口样式 */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 90;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 100;
+            background-color: #111827; /* gray-900 */
+            border: 1px solid #374151; /* gray-700 */
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            width: 90%;
+            max-width: 1024px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-open {
+            overflow: hidden; /* 防止背景滚动 */
+        }
+        .modal-open .modal-backdrop,
+        .modal-open .modal {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 导航栏 -->
+    <header class="bg-black/30 backdrop-blur-lg sticky top-0 z-50 w-full">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-lg font-bold text-white">
+                <a href="#" class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    <span>HI-1.42GHz Project</span>
+                </a>
+            </div>
+            <ul class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+                <li><a href="#significance" class="nav-link">核心价值</a></li>
+                <li><a href="#research" class="nav-link">同行格局</a></li>
+                <li><a href="#tech" class="nav-link">技术体系</a></li>
+                <li><a href="#content" class="nav-link">研究内容</a></li>
+                <li><a href="#opensource" class="nav-link">开源资源</a></li>
+                <li><a href="#results" class="nav-link">观测成果</a></li>
+                <li><a href="#team" class="nav-link">项目团队</a></li>
+            </ul>
+            <button id="mobile-menu-button" class="md:hidden text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black">
+            <ul class="px-6 py-4 flex flex-col space-y-4 text-center">
+                <li><a href="#significance" class="nav-link block py-2">核心价值</a></li>
+                <li><a href="#research" class="nav-link block py-2">同行格局</a></li>
+                <li><a href="#tech" class="nav-link block py-2">技术体系</a></li>
+                <li><a href="#content" class="nav-link block py-2">研究内容</a></li>
+                <li><a href="#opensource" class="nav-link block py-2">开源资源</a></li>
+                <li><a href="#results" class="nav-link block py-2">观测成果</a></li>
+                <li><a href="#team" class="nav-link block py-2">项目团队</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6">
+        <!-- Hero Section -->
+        <section class="text-center py-24 md:py-32 scroll-reveal">
+            <h1 class="text-4xl md:text-7xl font-bold text-white mb-6 tracking-tight">解码宇宙演化的“氢信号”</h1>
+            <p class="text-lg md:text-xl text-slate-400 font-light mb-8 max-w-3xl mx-auto">我们致力于捕捉宇宙中最丰富元素——中性氢的21cm谱线“探针”，绘制物质分布骨架，追踪星系演化动态，解构银河家园，为前沿科学与深空探索赋能。</p>
+        </section>
+
+        <!-- 各个模块 -->
+        <div class="space-y-24 md:space-y-32">
+            
+            <!-- 1. 项目核心价值 -->
+            <section id="significance" class="scroll-reveal">
+                <h2 class="section-title text-center">双层定位：<br class="md:hidden"/>从科学意义到应用前景</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="bg-gray-900/50 p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold text-white mb-4">当下核心科学价值</h3>
+                        <ul class="space-y-4 text-slate-300">
+                            <li><strong class="text-white">宇宙物质分布“骨架绘制”：</strong>量化星系及星系际气体的密度与分布，弥补光学观测受尘埃遮挡的局限。</li>
+                            <li><strong class="text-white">星系演化“动态追踪”：</strong>测量旋转曲线推导暗物质分布，捕捉星系并合的气体潮汐尾，还原其动态过程。</li>
+                            <li><strong class="text-white">银河系“家园解构”：</strong>穿透银盘绘制旋臂结构，测量自转曲线，修正我们对银河系的认知模型。</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900/50 p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold text-white mb-4">未来应用前景</h3>
+                        <ul class="space-y-4 text-slate-300">
+                           <li><strong class="text-white">前沿基础科学支撑：</strong>为检验ΛCDM模型、探索“宇宙黎明”等前沿课题提供宝贵的本土数据。</li>
+                            <li><strong class="text-white">深空探测工程赋能：</strong>接入VLBI网络，为深空探测器提供亚角秒级高精度定位导航支持。</li>
+                            <li><strong class="text-white">科普教育实践创新：</strong>开发远程观测平台，推动科学普及从“被动传播”向“主动探索”升级。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 同行研究格局 -->
+            <section id="research" class="scroll-reveal">
+                <h2 class="section-title text-center">成果总结与差异化定位</h2>
+                <div class="bg-gray-900/50 p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold text-white mb-6 text-center">国际主流设备与巡天项目进展</h3>
+                    <div class="overflow-x-auto">
+                        <table class="custom-table">
+                            <thead><tr><th>设备类型</th><th>代表设备 / 项目</th><th>核心优势</th><th>观测成果</th></tr></thead>
+                            <tbody>
+                                <tr><td>单口径望远镜</td><td>阿雷西博 (已退役)</td><td>大口径，高灵敏度</td><td>ALFALFA巡天发现10万+HI星系</td></tr>
+                                <tr><td>单口径望远镜</td><td>绿岸望远镜 (GBT)</td><td>全可动，低噪声</td><td>银河系银晕冷气体云探测</td></tr>
+                                <tr><td>单口径望远镜</td><td>中国天眼 (FAST)</td><td>超高灵敏度</td><td>开展银河系HI全域巡天</td></tr>
+                                <tr><td>射电干涉阵</td><td>甚大阵 (VLA)</td><td>高角分辨率</td><td>遥远星系HI精细结构成像</td></tr>
+                                <tr><td>射电干涉阵</td><td>SKA探路者 (ASKAP)</td><td>宽视场</td><td>WALLABY南天HI普查</td></tr>
+                                <tr><td>射电干涉阵</td><td>SKA探路者 (MeerKAT)</td><td>超深场观测能力</td><td>MIGHTEE探测高红移星系HI</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-12 text-center">
+                    <h3 class="text-2xl font-bold text-white mb-4">本项目的差异化定位</h3>
+                    <p class="text-lg leading-relaxed max-w-3xl mx-auto text-slate-400">现有设备仍存在三大观测空白：银晕冷气体云系统性探测、“缺失的重子”问题、宽视场与高灵敏度的均衡。本项目定位：**研发“高灵敏度+高巡天效率”的观测系统，聚焦特色方向，以“特定天区深度探测”弥补国际设备的短板**。</p>
+                </div>
+            </section>
+            
+            <!-- 3. 技术体系构建 -->
+            <section id="tech" class="scroll-reveal">
+                <h2 class="section-title text-center">原理-硬件-路线的完整闭环</h2>
+                <div class="space-y-12">
+                     <div class="bg-gray-900/50 p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold text-white mb-8 text-center">硬件系统：高灵敏度信号捕获与处理</h3>
+                        <div class="grid md:grid-cols-3 gap-12 text-center">
+                           <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#64ffda] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071a10 10 0 0114.142 0M1.394 8.536a15 15 0 0121.212 0" /></svg>
+                                <h4 class="text-xl font-bold text-white mb-2">天线系统</h4>
+                                <p class="text-slate-400">采用卡塞格伦/主焦点双方案优化设计，旁瓣抑制&lt;-28dB，确保高增益、低干扰。</p>
+                            </div>
+                            <!-- MODIFIED: Added id and cursor-pointer for modal trigger -->
+                            <div id="open-modal-btn" class="cursor-pointer group">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#64ffda] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.014A8.003 8.003 0 0112 3c1.398 0 2.743.57 3.714 1.543C18.5 6.5 19 9 19 11c2 1 2.657 1.657 2.657 1.657a8 8 0 01-11.314 6" /></svg>
+                                <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#64ffda] transition-colors">接收机前端</h4>
+                                <p class="text-slate-400">自主研发低温LNA，噪声温度&lt;25K。点击查看详细设计。</p>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#64ffda] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3" /></svg>
+                                <h4 class="text-xl font-bold text-white mb-2">频谱仪后端</h4>
+                                <p class="text-slate-400">基于FPGA+GPU异构架构，实现从模拟信号到高分辨率频谱数据的实时转化。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 4. 核心研究内容 -->
+            <section id="content" class="scroll-reveal">
+                <h2 class="section-title text-center">从观测目标到科学攻关</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="bg-gray-900/50 p-8 rounded-2xl space-y-8">
+                        <div>
+                            <h4 class="font-bold text-xl text-white mb-3">观测目标与巡天策略</h4>
+                            <ul class="list-disc list-inside space-y-2 text-slate-300">
+                                <li><strong>银河系反银心方向探测：</strong>深度扫描，寻找银河系外盘与星系际介质交互的证据。</li>
+                                <li><strong>本星系群矮星系观测：</strong>测量M31周边矮星系气体含量，检验“星系形成等级模型”。</li>
+                                <li><strong>机遇性目标(ToO)观测：</strong>响应暂现源警报，探测其周边HI气体的吸收线。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xl text-white mb-3">数据处理与分析流程</h4>
+                             <ul class="list-decimal list-inside space-y-2 text-slate-300">
+                                <li><strong>RFI抑制：</strong>采用机器学习算法自动识别并剔除人为干扰信号。</li>
+                                <li><strong>流量与带通校准：</strong>利用标准射电源修正望远镜增益和带通响应。</li>
+                                <li><strong>谱线提取与分析：</strong>多组分高斯拟合，提取视向速度、HI质量等物理参数。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900/50 p-8 rounded-2xl">
+                        <h4 class="font-bold text-xl text-white mb-4">关键科学问题攻关</h4>
+                        <div class="space-y-6">
+                            <div>
+                                <h5 class="font-semibold text-white text-lg">HI分布与星系动力学关联</h5>
+                                <p class="text-slate-400">通过测量星系旋转曲线的延伸部分，约束暗物质晕的密度剖面，为理解“星系质量缺失”问题提供关键数据。</p>
+                            </div>
+                             <div>
+                                <h5 class="font-semibold text-white text-lg">“暗星系”与极端气体星系搜寻</h5>
+                                <p class="text-slate-400">针对气体主导、恒星形成微弱的星系进行观测，为星系形成理论中“气体冷却效率”提供观测约束，解释“暗星系缺失”之谜。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- 5. 开源资源支撑 -->
+            <section id="opensource" class="scroll-reveal">
+                 <h2 class="section-title text-center">全球协作下的技术保障</h2>
+                 <div class="bg-gray-900/50 p-8 rounded-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>资源类型</th>
+                                    <th>代表工具 / 数据库</th>
+                                    <th>项目应用场景</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>核心数据处理软件</td><td>Astropy, CASA, GILDAS</td><td>坐标转换、单位计算、FITS文件读写、谱线基线扣除等。</td></tr>
+                                <tr><td>分析与可视化库</td><td>NumPy/SciPy, Matplotlib/Plotly</td><td>科学计算、统计分析、绘制高质量频谱图与瀑布图。</td></tr>
+                                <tr><td>数据与目录服务</td><td>NED, SIMBAD</td><td>查询目标星系的红移、距离、文献引用等先验信息。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                 </div>
+            </section>
+
+            <!-- 6. 当前观测成果展示 -->
+            <section id="results" class="scroll-reveal">
+                <h2 class="section-title text-center">当前观测成果与数据质量</h2>
+                <div class="bg-gray-900/50 p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold text-white mb-4 text-center">指向银道面 l=45°, b=0° 的HI频谱图</h3>
+                     <div class="w-full my-4 flex items-center justify-center">
+                        <div class="text-center w-full max-w-4xl">
+                             <div class="bg-black rounded-lg p-4"><img src="https://placehold.co/800x400/000000/64ffda?text=Spectrum+Chart+Placeholder" alt="[频谱图占位符]" class="rounded-md w-full"></div>
+                             <p class="text-slate-400 mt-4 text-sm">图注：谱线含3个发射峰，分别对应本地臂(～10km/s)、英仙臂(～-30km/s)、外臂(～-60km/s)，信噪比(SNR)最高达25。</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6 mt-10 text-center border-t border-gray-800 pt-8">
+                        <div>
+                            <p class="text-sm text-slate-400">系统等效流量密度 (SEFD)</p>
+                            <p class="text-2xl font-bold text-white mt-1">~45 Jy</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-400">频谱分辨率</p>
+                            <p class="text-2xl font-bold text-white mt-1">~91.55 Hz (~0.019 km/s)</p>
+                        </div>
+                         <div>
+                            <p class="text-sm text-slate-400">成像分辨率 (5m天线)</p>
+                            <p class="text-2xl font-bold text-white mt-1">~1.2 角分</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- 7. 项目团队 -->
+            <section id="team" class="scroll-reveal">
+                <h2 class="section-title text-center">项目团队</h2>
+                <div class="text-center max-w-3xl mx-auto">
+                     <p class="text-xl leading-relaxed mb-12 text-slate-300">我们是来自<strong class="text-white">东南大学信息科学与工程学院</strong>的团队，依托<strong class="text-white">东南大学业余无线电协会 (SEUARS, BY4SA)</strong> 开展活动，对射电天文与无线电技术充满热情。</p>
+                </div>
+                <div class="bg-gray-900/50 p-8 rounded-2xl max-w-3xl mx-auto">
+                    <div class="flex flex-col md:flex-row items-center text-center md:text-left">
+                        <img src="https://placehold.co/150x150/1f2937/e2e8f0?text=导师照片" alt="[孟桥教授照片]" class="w-32 h-32 rounded-full mb-6 md:mb-0 md:mr-8 flex-shrink-0">
+                        <div>
+                             <h3 class="text-2xl font-bold text-white">孟桥 教授</h3>
+                             <p class="text-lg text-[#64ffda] mb-3">指导老师</p>
+                             <p class="leading-relaxed text-slate-300">东南大学信息科学与工程学院教授，博士生导师。长期从事无线通信、信号处理及射电天文技术等领域的研究工作，为项目提供关键技术指导与学术支持。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="mt-24 md:mt-32 py-12">
+        <div class="container mx-auto px-6 text-center text-slate-500 text-sm">
+            <p>&copy; 2025 东南大学 1.42GHz 中性氢望远镜项目团队. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="tech-modal-backdrop" class="modal-backdrop hidden"></div>
+    <div id="tech-modal" class="modal hidden">
+        <div class="p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">接收机前端：多级放大电路设计</h3>
+                <button id="close-modal-btn" class="text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-black p-4 rounded-lg">
+                    <h4 class="font-bold text-lg text-white mb-3">系统框图</h4>
+                    <!-- IMPORTANT: Replace the src below with the path to your '射频前端.png' image -->
+                    <img src="https://placehold.co/600x350/000000/e2e8f0?text=射频前端电路框图" alt="射频前端电路框图" class="w-full h-auto rounded-md">
+                </div>
+                <div class="space-y-4">
+                    <h4 class="font-bold text-lg text-white">核心设计要点</h4>
+                    <ul class="list-disc list-inside text-slate-300 space-y-2">
+                        <li><strong>噪声控制：</strong>单片机控制噪声注入开关与PGA增益。</li>
+                        <li><strong>电源管理：</strong>锂电池和LDO代替开关电源，尽可能降低电源噪声和纹波。</li>
+                        <li><strong>核心器件：</strong>选用0.4dB低噪声系数LNA，确保信号质量。</li>
+                        <li><strong>增益调节：</strong>SPDT调整增益，总增益范围覆盖20~60dB，适应不同强度信号。</li>
+                    </ul>
+                     <div class="bg-gray-800/50 p-4 rounded-lg mt-4">
+                        <h5 class="font-semibold text-[#64ffda] mb-2">关键芯片</h5>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <p><strong class="text-white">BPF:</strong> SAW@1420MHz</p>
+                            <p><strong class="text-white">LNA:</strong> TQP3M9037 (20dB)</p>
+                            <p><strong class="text-white">LDO:</strong> TPS7A8300</p>
+                            <p><strong class="text-white">PGA:</strong> 0-40dB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- 移动端菜单切换 ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- 滚动渐入效果 ---
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // --- 模态窗口 (Modal) 逻辑 ---
+        const body = document.querySelector('body');
+        const openModalBtn = document.getElementById('open-modal-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modal = document.getElementById('tech-modal');
+        const backdrop = document.getElementById('tech-modal-backdrop');
+
+        const openModal = () => {
+            body.classList.add('modal-open');
+            modal.classList.remove('hidden');
+            backdrop.classList.remove('hidden');
+        };
+
+        const closeModal = () => {
+            body.classList.remove('modal-open');
+            modal.classList.add('hidden');
+            backdrop.classList.add('hidden');
+        };
+
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && body.classList.contains('modal-open')) {
+                closeModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
+
